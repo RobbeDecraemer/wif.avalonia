@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+        xmlns:converters="clr-namespace:WifViewer.Converters"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
+		Width="1000" Height="700"
+        x:Class="WifViewer.MainWindow"
+        Title="3D Studio"
+		Icon="/3dstudio.ico">
+
+	<DockPanel>
+		<Menu DockPanel.Dock="Top">
+			<MenuItem Header="Script">
+				<MenuItem Header="New [Ctrl+N]" Command="{Binding NewScriptCommand}" HotKey="Ctrl+N" />
+				<MenuItem Header="Open [Ctrl+O]" Command="{Binding LoadScriptCommand}" HotKey="Ctrl+O" />
+				<MenuItem Header="Save [Ctrl+S]" Command="{Binding CurrentDocument.Value.SaveScriptCommand}" HotKey="Ctrl+S" />
+				<MenuItem Header="Save as [Shift+Ctrl+S]" Command="{Binding CurrentDocument.Value.SaveScriptAsCommand}" HotKey="Shift+Ctrl+S" />
+				<MenuItem Header="Render [F5]" Command="{Binding CurrentDocument.Value.RenderScript}" HotKey="F5" />
+			</MenuItem>
+			<MenuItem Header="Animation">
+				<MenuItem Header="Open" Command="{Binding LoadWifCommand}" HotKey="Ctrl+W" />
+			</MenuItem>
+			<MenuItem Header="Settings" Command="{Binding ConfigureCommand}" />
+		</Menu>
+		<TabControl Items="{Binding Documents}" SelectedItem="{Binding CurrentDocument.Value}">
+			<TabControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding ShortPath.Value}" FontSize="12">
+						<TextBlock.FontWeight>
+							<Binding Path="IsDirty.Value">
+								<Binding.Converter>
+									<converters:BoolConverter True="Bold" False="Normal" />
+								</Binding.Converter>
+							</Binding>
+						</TextBlock.FontWeight>
+					</TextBlock>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+			<TabControl.ContentTemplate>
+				<DataTemplate>
+					<ae:TextEditor
+						FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
+						Margin="5"
+						ShowLineNumbers="True"
+						LineNumbersForeground="Magenta"
+						SyntaxHighlighting="JavaScript"
+						HorizontalScrollBarVisibility="Auto"
+						VerticalScrollBarVisibility="Visible"
+						FontWeight="Light"
+						FontSize="12"
+						Document="{Binding Source}"/>
+				</DataTemplate>
+			</TabControl.ContentTemplate>
+		</TabControl>
+	</DockPanel>
+</Window>

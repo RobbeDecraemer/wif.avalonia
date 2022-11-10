@@ -1,0 +1,67 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+        xmlns:converters="clr-namespace:WifViewer.Converters"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="500"
+		Width="600" Height="500"
+        x:Class="WifViewer.AnimationWindow"
+        Title="Animation"
+		Icon="/3dstudio.ico">
+	<Window.Resources>
+		<converters:BoolConverter x:Key="toggleAnimatingConverter" True="&#xE103;" False="&#xE102;" />
+		<converters:BoolConverter x:Key="stretchConverter" True="Uniform" False="None" />
+	</Window.Resources>
+	<Window.WindowState>
+		<Binding Path="FullScreen.Value">
+			<Binding.Converter>
+				<converters:BoolConverter True="Maximized" False="Normal" />
+			</Binding.Converter>
+		</Binding>
+	</Window.WindowState>
+	<DockPanel>
+		<!--StatusBar DockPanel.Dock="Bottom">
+			<TextBlock>
+				<TextBlock.Text>
+					<Binding Path="IsDoneRendering.Value">
+						<Binding.Converter>
+							<converters:BoolConverter True="Finished!" False="Rendering..." />
+						</Binding.Converter>
+					</Binding>
+				</TextBlock.Text>
+			</TextBlock>
+		</StatusBar-->
+
+		<TabControl x:Name="tabControl" SelectedIndex="1">
+			<TabItem Header="Result" x:Name="resultTab" IsVisible="false">
+				<DockPanel>
+					<!--ToolBar DockPanel.Dock="Top">
+						<CheckBox Style="{StaticResource toolbarIcon}" IsChecked="{Binding ScaleToFill.Value}" Content="&#xECE9;" ToolTip="Scale to fit [s]" />
+						<CheckBox Style="{StaticResource toolbarIcon}" IsChecked="{Binding FullScreen.Value}" Content="&#xE740;" ToolTip="Full screen [f]" />
+						<TextBlock Text="{Binding CurrentFrameIndex.Value}" Width="20" Margin="5" TextAlignment="Center" />
+						<TextBlock Text="of" Margin="5" />
+						<TextBlock Text="{Binding MaximumFrameIndex.Value}" Width="20" Margin="5" TextAlignment="Center" />
+						<Slider Minimum="0" Maximum="{Binding MaximumFrameIndex.Value}" Value="{Binding CurrentFrameIndex.Value}" Width="100" Margin="5" />
+						<CheckBox Style="{StaticResource toolbarIcon}" IsChecked="{Binding Timer.IsEnabled}" Content="{Binding Timer.IsEnabled, Converter={StaticResource toggleAnimatingConverter}}" FontFamily="Segoe MDL2 Assets" ToolTip="Toggle Animation [Space]" />
+						<Button Style="{StaticResource toolbarIcon}" Content="&#xE8C8;" Command="{Binding CopyFrame}" ToolTip="Copy current frame to clipboard [ctrl-c]" />
+						<Button Style="{StaticResource toolbarIcon}" Content="&#xE799;" Command="{Binding ExportFrame}" ToolTip="Export single frame [x]" />
+						<Button Style="{StaticResource toolbarIcon}" Content="&#xE81E;" Command="{Binding ExportMovie}" ToolTip="Export movie [X]" />
+						<Slider Minimum="1" Maximum="100" Value="{Binding AnimationSpeed}" Width="100" Margin="5" />
+						<TextBlock Text="{Binding AnimationSpeed, StringFormat={}{0} fps}" VerticalAlignment="Center" />
+					</ToolBar-->
+					<Image Source="{Binding CurrentFrame.Value}" Stretch="{Binding ScaleToFill.Value, Converter={StaticResource stretchConverter}}" />
+				</DockPanel>
+			</TabItem>
+			<TabItem Header="Messages">
+				<ae:TextEditor
+                    LineNumbersForeground="Magenta"
+				    FontFamily="Consolas"
+				    FontSize="10"
+                    ShowLineNumbers="False"
+                    IsReadOnly="True"
+                    Document="{Binding Messages}" />
+			</TabItem>
+		</TabControl>
+	</DockPanel>
+</Window>
