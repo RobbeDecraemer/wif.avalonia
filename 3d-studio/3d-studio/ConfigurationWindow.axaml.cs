@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using System.Collections.Generic;
 using WifViewer.ViewModels;
 
 namespace WifViewer
@@ -24,18 +25,23 @@ namespace WifViewer
             Close();
         }
 
-        private void OnBrowse(object sender, RoutedEventArgs e)
+        private async void OnBrowse(object sender, RoutedEventArgs e)
         {
-            //var dlg = new OpenFileDialog()
-            //{
-            //    Filter = "Executables|*.exe",
-            //    CheckFileExists = true
-            //};
-            //
-            //if (dlg.ShowDialog() == true)
-            //{
-            //    ((ConfigurationViewModel)DataContext).RayTracerPath.Value = dlg.FileName;
-            //}
+            var fileDialog = new OpenFileDialog()
+            {
+                Filters = new List<FileDialogFilter> { new FileDialogFilter { Name = "Executables", Extensions = new List<string> { } } },
+                AllowMultiple = false
+            };
+
+            var result = await fileDialog.ShowAsync(this);
+
+            if (result != null)
+            {
+                foreach (var res in result)
+                {
+                    ((ConfigurationViewModel)DataContext).RayTracerPath.Value = res;
+                }
+            }
         }
     }
 }
