@@ -111,7 +111,7 @@ namespace WifViewer
             for (int i = 0; i < width * height; i++)
             {
                 int pc = i * 4;
-                int pb = i * 3;
+                int pb = i * 3 + 8;
                 copy[pc] = buffer[pb];
                 copy[pc+1] = buffer[pb+1];
                 copy[pc+2] = buffer[pb+2];

@@ -11,17 +11,10 @@
 		Icon="/3dstudio.ico">
 	<Window.Resources>
 		<converters:BoolConverter x:Key="toggleAnimatingConverter" True="&#xE103;" False="&#xE102;" />
-		<converters:BoolConverter x:Key="stretchConverter" True="Uniform" False="None" />
+		<converters:StretchConverter x:Key="stretchConverter" />
 	</Window.Resources>
-	<Window.WindowState>
-		<Binding Path="FullScreen.Value">
-			<Binding.Converter>
-				<converters:BoolConverter True="Maximized" False="Normal" />
-			</Binding.Converter>
-		</Binding>
-	</Window.WindowState>
 	<DockPanel>
-		<!--StatusBar DockPanel.Dock="Bottom">
+		<Border BorderBrush="Black" BorderThickness="0, 1, 0, 0" DockPanel.Dock="Bottom">
 			<TextBlock>
 				<TextBlock.Text>
 					<Binding Path="IsDoneRendering.Value">
@@ -31,25 +24,25 @@
 					</Binding>
 				</TextBlock.Text>
 			</TextBlock>
-		</StatusBar-->
+		</Border>
 
-		<TabControl x:Name="tabControl" SelectedIndex="1">
-			<TabItem Header="Result" x:Name="resultTab" IsVisible="false">
+		<TabControl x:Name="tabControl" SelectedIndex="0">
+			<TabItem Header="Result" x:Name="resultTab" IsVisible="true">
 				<DockPanel>
-					<!--ToolBar DockPanel.Dock="Top">
-						<CheckBox Style="{StaticResource toolbarIcon}" IsChecked="{Binding ScaleToFill.Value}" Content="&#xECE9;" ToolTip="Scale to fit [s]" />
-						<CheckBox Style="{StaticResource toolbarIcon}" IsChecked="{Binding FullScreen.Value}" Content="&#xE740;" ToolTip="Full screen [f]" />
-						<TextBlock Text="{Binding CurrentFrameIndex.Value}" Width="20" Margin="5" TextAlignment="Center" />
-						<TextBlock Text="of" Margin="5" />
-						<TextBlock Text="{Binding MaximumFrameIndex.Value}" Width="20" Margin="5" TextAlignment="Center" />
+					<StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Spacing="5" Margin="3">
+						<CheckBox Classes="icon" IsChecked="{Binding ScaleToFill.Value}" Content="&#xECE9;" ToolTip.Tip="Scale to fit [S]" HotKey="S" />
+						<CheckBox Classes="icon" IsChecked="{Binding FullScreen.Value}" Content="&#xE740;" ToolTip.Tip="Full screen [F]" HotKey="F" />
+						<TextBlock Text="{Binding CurrentFrameIndex.Value}" Width="20" VerticalAlignment="Center" TextAlignment="Center" />
+						<TextBlock Text="of" VerticalAlignment="Center" />
+						<TextBlock Text="{Binding MaximumFrameIndex.Value}" Width="20" VerticalAlignment="Center" TextAlignment="Center" />
 						<Slider Minimum="0" Maximum="{Binding MaximumFrameIndex.Value}" Value="{Binding CurrentFrameIndex.Value}" Width="100" Margin="5" />
-						<CheckBox Style="{StaticResource toolbarIcon}" IsChecked="{Binding Timer.IsEnabled}" Content="{Binding Timer.IsEnabled, Converter={StaticResource toggleAnimatingConverter}}" FontFamily="Segoe MDL2 Assets" ToolTip="Toggle Animation [Space]" />
-						<Button Style="{StaticResource toolbarIcon}" Content="&#xE8C8;" Command="{Binding CopyFrame}" ToolTip="Copy current frame to clipboard [ctrl-c]" />
-						<Button Style="{StaticResource toolbarIcon}" Content="&#xE799;" Command="{Binding ExportFrame}" ToolTip="Export single frame [x]" />
-						<Button Style="{StaticResource toolbarIcon}" Content="&#xE81E;" Command="{Binding ExportMovie}" ToolTip="Export movie [X]" />
+						<CheckBox Classes="icon" IsChecked="{Binding Timer.IsEnabled}" Content="{Binding Timer.IsEnabled, Converter={StaticResource toggleAnimatingConverter}}" FontFamily="Segoe MDL2 Assets" ToolTip.Tip="Toggle Animation [Space]" HotKey="Space" />
+						<!--Button Content="&#xE8C8;" Command="{Binding CopyFrame}" ToolTip.Tip="Copy current frame to clipboard [Ctrl+C]" HotKey="Ctrl+C" /-->
+						<Button Classes="icon" Content="&#xE799;" Command="{Binding ExportFrame}" ToolTip.Tip="Export single frame [X]" HotKey="X" />
+						<Button Classes="icon" Content="&#xE81E;" Command="{Binding ExportMovie}" ToolTip.Tip="Export movie [Shift+X]" HotKey="Shift+X" />
 						<Slider Minimum="1" Maximum="100" Value="{Binding AnimationSpeed}" Width="100" Margin="5" />
 						<TextBlock Text="{Binding AnimationSpeed, StringFormat={}{0} fps}" VerticalAlignment="Center" />
-					</ToolBar-->
+					</StackPanel>
 					<Image Source="{Binding CurrentFrame.Value}" Stretch="{Binding ScaleToFill.Value, Converter={StaticResource stretchConverter}}" />
 				</DockPanel>
 			</TabItem>

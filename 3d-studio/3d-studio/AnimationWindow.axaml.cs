@@ -17,6 +17,11 @@ namespace WifViewer
 
             this.DataContext = vm;
 
+            vm.FullScreen.ValueChanged += () => 
+            {
+                WindowState = vm.FullScreen.Value ? WindowState.FullScreen : WindowState.Normal;
+            };
+
             vm.MaximumFrameIndex.ValueChanged += () =>
             {
                 if (vm.MaximumFrameIndex.Value == 0)
