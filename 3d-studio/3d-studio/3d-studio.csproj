@@ -14,9 +14,11 @@
   <ItemGroup>
     <None Remove=".gitignore" />
     <None Remove="3dstudio.ico" />
+    <None Remove="SegMDL2.ttf" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="3dstudio.ico" />
+    <AvaloniaResource Include="SegMDL2.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="3dstudio.ico" />
