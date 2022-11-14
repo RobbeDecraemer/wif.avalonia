@@ -43,5 +43,24 @@ namespace WifViewer
                 }
             }
         }
+
+        private async void OnBrowseFfmpeg(object sender, RoutedEventArgs e)
+        {
+            var fileDialog = new OpenFileDialog()
+            {
+                Filters = new List<FileDialogFilter> { new FileDialogFilter { Name = "Executables", Extensions = new List<string> { } } },
+                AllowMultiple = false
+            };
+
+            var result = await fileDialog.ShowAsync(this);
+
+            if (result != null)
+            {
+                foreach (var res in result)
+                {
+                    ((ConfigurationViewModel)DataContext).FfmpegPath.Value = res;
+                }
+            }
+        }
     }
 }

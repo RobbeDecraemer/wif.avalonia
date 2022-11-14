@@ -195,37 +195,23 @@ namespace WifViewer.ViewModels
             }
         }
 
-        private void OnExportMovie()
+        private async void OnExportMovie()
         {
-            //var saveDialog = new SaveFileDialog()
-            //{
-            //    Filter = "Gif Files|*.gif",
-            //    AddExtension = true,
-            //    OverwritePrompt = true,
-            //    ValidateNames = true
-            //};
-            //
-            //if (saveDialog.ShowDialog() == true)
-            //{
-            //    var frames = new List<WriteableBitmap>(this.Frames);
-            //    var path = saveDialog.FileName;
-            //
-            //    ThreadPool.QueueUserWorkItem(_ =>
-            //    {
-            //        var encoder = new GifBitmapEncoder();
-            //
-            //        foreach (var frame in frames)
-            //        {
-            //            var bitmapFrame = BitmapFrame.Create(frame);
-            //            encoder.Frames.Add(bitmapFrame);
-            //        }
-            //
-            //        using (var file = File.OpenWrite(path))
-            //        {
-            //            encoder.Save(file);
-            //        }
-            //    });
-            //}
+            var fileDialog = new SaveFileDialog()
+            {
+                DefaultExtension = ".mp4",
+                Filters = new List<FileDialogFilter> {
+                    new FileDialogFilter { Name = "Video Files", Extensions = new List<string> { "mp4" } }
+                },
+            };
+
+            var window = ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).MainWindow;
+            var result = await fileDialog.ShowAsync(window);
+
+            if (result != null)
+            {
+                await MovieExporter.Export(new List<WriteableBitmap>(Frames), AnimationSpeed, result);
+            }
         }
 
         private void OnPreviousFrame()

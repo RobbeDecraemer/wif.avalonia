@@ -2,8 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="200"
-		Width="400" Height="200"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
+		Width="400" Height="250"
         x:Class="WifViewer.ConfigurationWindow"
         Title="Configuration"
 		Icon="/3dstudio.ico">
@@ -26,12 +26,16 @@
 				<RowDefinition Height="auto" />
 				<RowDefinition Height="auto" />
 				<RowDefinition Height="auto" />
+        <RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Grid.Column="0" Margin="15">Ray Tracer Path</TextBlock>
 			<TextBox Grid.Row="0" Grid.Column="1" Text="{Binding RayTracerPath.Value}" VerticalAlignment="Center" Margin="5" />
 			<Button Grid.Row="0" Grid.Column="2" Click="OnBrowse" Padding="5" Margin="5">Browse</Button>
-			<CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" IsChecked="{Binding AutoSave.Value}" VerticalAlignment="Center" Margin="15">AutoSave</CheckBox>
-			<TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Text="Ray Tracer executable not found." VerticalAlignment="Center" Margin="15" Foreground="Red" 
+      <TextBlock Grid.Row="1" Grid.Column="0" Margin="15">Ffmpeg Path</TextBlock>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FfmpegPath.Value}" VerticalAlignment="Center" Margin="5" />
+      <Button Grid.Row="1" Grid.Column="2" Click="OnBrowseFfmpeg" Padding="5" Margin="5">Browse</Button>
+			<CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" IsChecked="{Binding AutoSave.Value}" VerticalAlignment="Center" Margin="15">AutoSave</CheckBox>
+			<TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Text="Ray Tracer executable not found." VerticalAlignment="Center" Margin="15" Foreground="Red" 
 					   IsVisible="{Binding IsRaytracerFound.Value, Converter={x:Static BoolConverters.Not}}" />
 		</Grid>
 		<Button Grid.Row="1" Grid.Column="0" Margin="5" Padding="5" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Click="OnOk">Ok</Button>

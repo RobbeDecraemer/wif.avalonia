@@ -26,6 +26,7 @@ namespace WifViewer
             {
                 var cfg = JsonConvert.DeserializeObject<WifCfg>(File.ReadAllText(file));
                 Configuration.RAYTRACER_PATH = cfg.raytracer;
+                Configuration.FFMPEG_PATH = cfg.ffmpeg;
                 Configuration.AUTO_SAVE = cfg.auto_save;
             }
 
