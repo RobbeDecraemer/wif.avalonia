@@ -1,27 +1,51 @@
-﻿using AvaloniaEdit.Document;
-using Cells;
-using Commands;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Threading;
+using AvaloniaEdit.Document;
+using Avalonia.Media.Imaging;
+using Avalonia.Controls.ApplicationLifetimes;
 using System;
-using System.IO;
-using System.Threading;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Cells;
+using Commands;
 using WifViewer.Rendering;
-using Avalonia.Media.Imaging;
-using Avalonia.Threading;
+using System.ComponentModel;
 
 namespace WifViewer.ViewModels
 {
-    public class AnimationViewModel
+    public class AnimationViewModel : INotifyPropertyChanged
     {
-        public AnimationViewModel()
+        private PropertyChangedEventHandler PropertyChanged = (obj, args) => { };
+
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {
-            this.Timer = new DispatcherTimer(TimeSpan.FromMilliseconds(50), DispatcherPriority.Background, (o, e) => OnTimerTick())
+            add
+            {
+                lock (PropertyChanged)
+                {
+                    PropertyChanged += value;
+                }
+            }
+            remove
+            {
+                lock (PropertyChanged)
+                {
+                    PropertyChanged -= value;
+                }
+            }
+        }
+
+        public AnimationViewModel(int fps)
+        {
+            this.Timer = new DispatcherTimer(TimeSpan.FromMilliseconds(fps), DispatcherPriority.Background, (o, e) => OnTimerTick())
             {
                 IsEnabled = false
             };
 
+            this.AnimationSpeed = fps;
+            this.TimerEnabled = Cell.Create(false);
             this.Frames = new ObservableCollection<WriteableBitmap>();
             this.CurrentFrameIndex = Cell.Create(0);
             this.CurrentFrame = Cell.Derived(this.CurrentFrameIndex, DeriveCurrentFrame);
@@ -39,6 +63,8 @@ namespace WifViewer.ViewModels
             this.CopyFrame = EnabledCommand.FromDelegate(OnCopyFrame);
             this.PreviousFrame = EnabledCommand.FromDelegate(OnPreviousFrame);
             this.NextFrame = EnabledCommand.FromDelegate(OnNextFrame);
+
+            this.TimerEnabled.ValueChanged += () => this.Timer.IsEnabled = this.TimerEnabled.Value;
         }
 
         private void OnToggleAnimation()
@@ -54,13 +80,7 @@ namespace WifViewer.ViewModels
 
         public DispatcherTimer Timer { get; }
 
-        private void OnTimerTick()
-        {
-            if (this.Frames.Count > 0)
-            {
-                this.CurrentFrameIndex.Value = (this.CurrentFrameIndex.Value + 1) % this.Frames.Count;
-            }
-        }
+        public Cell<bool> TimerEnabled { get; }
 
         public int AnimationSpeed
         {
@@ -71,6 +91,15 @@ namespace WifViewer.ViewModels
             set
             {
                 this.Timer.Interval = TimeSpan.FromMilliseconds(1000.0 / value);
+                PropertyChanged(this, new PropertyChangedEventArgs("AnimationSpeed"));
+            }
+        }
+
+        private void OnTimerTick()
+        {
+            if (this.Frames.Count > 0)
+            {
+                this.CurrentFrameIndex.Value = (this.CurrentFrameIndex.Value + 1) % this.Frames.Count;
             }
         }
 
@@ -145,48 +174,25 @@ namespace WifViewer.ViewModels
             //Clipboard.SetImage(this.CurrentFrame.Value);
         }
 
-        private void OnExportFrame()
+        private async void OnExportFrame()
         {
-            //var saveDialog = new SaveFileDialog()
-            //{
-            //    Filter = "Gif Files|*.gif|Jpeg Files|*.jpeg|Png Files|*.png",
-            //    AddExtension = true,
-            //    OverwritePrompt = true,
-            //    ValidateNames = true
-            //};
-            //
-            //if (saveDialog.ShowDialog() == true)
-            //{
-            //    var frame = this.CurrentFrame.Value;
-            //    var path = saveDialog.FileName;
-            //
-            //    BitmapEncoder encoder;
-            //
-            //    if (path.ToLower().EndsWith(".png"))
-            //    {
-            //        encoder = new PngBitmapEncoder();
-            //    }
-            //    else if (path.ToLower().EndsWith(".jpeg"))
-            //    {
-            //        encoder = new JpegBitmapEncoder();
-            //    }
-            //    else if (path.ToLower().EndsWith(".gif"))
-            //    {
-            //        encoder = new GifBitmapEncoder();
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("Bug");
-            //        return;
-            //    }
-            //
-            //    encoder.Frames.Add(BitmapFrame.Create(frame));
-            //
-            //    using (var file = File.OpenWrite(path))
-            //    {
-            //        encoder.Save(file);
-            //    }
-            //}
+            var fileDialog = new SaveFileDialog()
+            {
+                DefaultExtension = ".png",
+                Filters = new List<FileDialogFilter> { 
+                    new FileDialogFilter { Name = "Png Files", Extensions = new List<string> { "png" } },
+                    new FileDialogFilter { Name = "Jpeg Files", Extensions = new List<string> { "jpeg" } },
+                    new FileDialogFilter { Name = "Gif Files", Extensions = new List<string> { "gif" } },
+                },
+            };
+
+            var window = ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).MainWindow;
+            var result = await fileDialog.ShowAsync(window);
+
+            if (result != null)
+            {
+                this.CurrentFrame.Value.Save(result);
+            }
         }
 
         private void OnExportMovie()

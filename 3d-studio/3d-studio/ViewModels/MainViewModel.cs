@@ -60,7 +60,7 @@ namespace WifViewer.ViewModels
 
         private void LoadWif(string path)
         {
-            var animationVM = new AnimationViewModel();
+            var animationVM = new AnimationViewModel(30);
             WifLoader.LoadInSeparateThread(path, animationVM.CreateReceiver());
 
             var viewer = new AnimationWindow(animationVM);

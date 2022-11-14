@@ -36,7 +36,7 @@
 						<TextBlock Text="of" VerticalAlignment="Center" />
 						<TextBlock Text="{Binding MaximumFrameIndex.Value}" Width="20" VerticalAlignment="Center" TextAlignment="Center" />
 						<Slider Minimum="0" Maximum="{Binding MaximumFrameIndex.Value}" Value="{Binding CurrentFrameIndex.Value}" Width="100" Margin="5" />
-						<CheckBox Classes="icon" IsChecked="{Binding Timer.IsEnabled}" Content="{Binding Timer.IsEnabled, Converter={StaticResource toggleAnimatingConverter}}" FontFamily="Segoe MDL2 Assets" ToolTip.Tip="Toggle Animation [Space]" HotKey="Space" />
+						<CheckBox Classes="icon" IsChecked="{Binding TimerEnabled.Value}" Content="{Binding TimerEnabled.Value, Converter={StaticResource toggleAnimatingConverter}}" ToolTip.Tip="Toggle Animation [Space]" HotKey="Space" />
 						<!--Button Content="&#xE8C8;" Command="{Binding CopyFrame}" ToolTip.Tip="Copy current frame to clipboard [Ctrl+C]" HotKey="Ctrl+C" /-->
 						<Button Classes="icon" Content="&#xE799;" Command="{Binding ExportFrame}" ToolTip.Tip="Export single frame [X]" HotKey="X" />
 						<Button Classes="icon" Content="&#xE81E;" Command="{Binding ExportMovie}" ToolTip.Tip="Export movie [Shift+X]" HotKey="Shift+X" />

@@ -7,6 +7,7 @@ using Commands;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using WifViewer.Rendering;
 
@@ -69,7 +70,8 @@ namespace WifViewer.ViewModels
                 Save();
             }
 
-            var animationVM = new AnimationViewModel();
+            var animMatch = Regex.Match(Source.Text, @"Pipeline\.animation\((.*?)\)");
+            var animationVM = new AnimationViewModel(animMatch.Success ? int.Parse(animMatch.Groups[1].Value) : 30);
             var raytracer = new Renderer();
             var receiver = animationVM.CreateReceiver();
 
